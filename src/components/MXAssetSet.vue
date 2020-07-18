@@ -4,14 +4,14 @@
       <tr>
         <th>Asset #</th>
         <th>Description</th>
-        <th>Site</th>
         <th>Location</th>
+        <th>Site</th>
       </tr>
       <tr v-for="asset in assets" v-bind:key="asset.assetuid">
         <td><router-link v-bind:to="'asset/' + page + '/' + asset.assetuid">{{ asset.assetnum }}</router-link></td>
         <td>{{ asset.description }}</td>
-        <td>{{ asset.siteid }}</td>
         <td>{{ asset.location }}</td>
+        <td>{{ asset.siteid }}</td>
       </tr>
     </table>
     <button
@@ -40,7 +40,7 @@ export default {
   },
   beforeMount() {
     var pageno = this.$props.pageno ? 'pageno=' + this.$props.pageno + '&': '';
-    this.queryMXREST('http://192.168.1.74:9080/maximo/oslc/os/mxasset?' + pageno + '_lid=wilson&_lpwd=wilson&lean=1&oslc.pageSize=5&oslc.select=assetuid,assetnum,siteid,description,location');
+    this.queryMXREST('http://192.168.1.74:9080/maximo/oslc/os/mxasset?' + pageno + '_lid=wilson&_lpwd=wilson&lean=1&oslc.pageSize=5&oslc.select=assetuid,assetnum,siteid,description,location,status,parent,itemnum,priority,serialnum,failurecode,vendor,manufacturer,installdate,purchaseprice,isrunning,totdowntime,changeby,changedate');
   },
   methods: {
     queryMXREST: function(url) {
