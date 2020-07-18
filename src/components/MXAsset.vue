@@ -1,0 +1,47 @@
+<template>  
+  <div>
+    <ul>
+      <li><b>Asset #:</b> {{asset.assetnum}}</li>
+      <li><b>Description:</b> {{asset.description}}</li>
+      <li><b>Site: </b>{{asset.siteid}}</li>
+      <li><b>Location: </b>{{asset.location}}</li>
+    </ul>
+    <router-link v-bind:to="'/' + this.$props.pageno">List Page</router-link>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'MXAsset',
+  props: [
+    'assetuid',
+    'pageno'
+  ],
+  data() {
+    return {
+      asset: {}
+    };
+  },
+  beforeMount() {
+    this.queryMXREST('http://192.168.1.74:9080/maximo/oslc/os/mxasset/' + this.$props.assetuid + '?_lid=wilson&_lpwd=wilson&lean=1')
+  },
+  methods: {
+    queryMXREST: function(url) {
+      fetch(url)
+        .then(response => response.json())
+        .then(json => {
+          this.asset = json;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }
+};
+</script>
+
+<style scoped>
+ul, li {
+  text-align: left;
+}
+</style>
