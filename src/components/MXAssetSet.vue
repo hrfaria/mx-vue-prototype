@@ -18,11 +18,11 @@
     </table>
     <button
       v-on:click="queryMXAssetSet(previousPageURL)"
-      v-bind:disabled="this.$store.state.currentPage.previousPageURL.length == 0"
+      v-bind:disabled="previousPageURL.length == 0"
     >Previous page</button>
     <button
       v-on:click="queryMXAssetSet(nextPageURL)"
-      v-bind:disabled="this.$store.state.currentPage.nextPageURL.length == 0"
+      v-bind:disabled="nextPageURL.length == 0"
     >Next page</button>
   </div>
 </template>
