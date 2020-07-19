@@ -8,59 +8,49 @@
         <th>Site</th>
       </tr>
       <tr v-for="asset in assets" v-bind:key="asset.assetuid">
-        <td><router-link v-bind:to="'asset/' + page + '/' + asset.assetuid">{{ asset.assetnum }}</router-link></td>
+        <td>
+          <router-link v-bind:to="'asset/' + asset.assetuid">{{ asset.assetnum }}</router-link>
+        </td>
         <td>{{ asset.description }}</td>
         <td>{{ asset.location }}</td>
         <td>{{ asset.siteid }}</td>
       </tr>
     </table>
     <button
-      v-on:click="queryMXREST(previousPageURL)" 
-      v-bind:disabled="previousPageURL.length == 0"
+      v-on:click="queryMXAssetSet(previousPageURL)"
+      v-bind:disabled="this.$store.state.currentPage.previousPageURL.length == 0"
     >Previous page</button>
-    <button v-on:click="queryMXREST(nextPageURL)" 
-      v-bind:disabled="nextPageURL.length == 0"
+    <button
+      v-on:click="queryMXAssetSet(nextPageURL)"
+      v-bind:disabled="this.$store.state.currentPage.nextPageURL.length == 0"
     >Next page</button>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
+
 export default {
-  name: 'MXAssetSet',
-  props: [
-    'pageno'
-  ],
-  data() {
-    return {
-      assets: [],
-      previousPageURL: '',
-      nextPageURL: '',
-      page: this.pageno
-    };
+  name: "MXAssetSet",
+  mounted() {
+    var pageno = this.pagenum > 0 ? "pageno=" + this.pagenum + "&" : "";
+    var url =
+      "http://192.168.1.74:9080/maximo/oslc/os/mxasset?" +
+      pageno +
+      "_lid=wilson&_lpwd=wilson&lean=1&oslc.pageSize=5&oslc.select=assetuid,assetnum,siteid,description,location,status,parent,itemnum,priority,serialnum,failurecode,vendor,manufacturer,installdate,purchaseprice,isrunning,totdowntime,changeby,changedate";
+    this.queryMXAssetSet(url);
   },
-  beforeMount() {
-    var pageno = this.$props.pageno ? 'pageno=' + this.$props.pageno + '&': '';
-    this.queryMXREST('http://192.168.1.74:9080/maximo/oslc/os/mxasset?' + pageno + '_lid=wilson&_lpwd=wilson&lean=1&oslc.pageSize=5&oslc.select=assetuid,assetnum,siteid,description,location,status,parent,itemnum,priority,serialnum,failurecode,vendor,manufacturer,installdate,purchaseprice,isrunning,totdowntime,changeby,changedate');
+  computed: {
+    ...mapGetters({
+      assets: "getAssets",
+      previousPageURL: "getPreviousPageURL",
+      nextPageURL: "getNextPageURL",
+      pagenum: "getPagenum"
+    })
   },
   methods: {
-    queryMXREST: function(url) {
-      fetch(url)
-        .then(response => response.json())
-        .then(json => {
-          this.assets = json.member;
-
-          var nextPage = json.responseInfo.nextPage;
-          this.nextPageURL = nextPage != null ? nextPage.href : '';
-
-          var previousPage = json.responseInfo.previousPage;
-          this.previousPageURL = previousPage != null ? previousPage.href : '';
-
-          this.page = json.responseInfo.pagenum;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+    ...mapActions(["queryMXAssetSet"])
   }
 };
 </script>

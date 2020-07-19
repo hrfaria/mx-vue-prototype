@@ -20,36 +20,30 @@
       <li><b>Changed By: </b>{{asset.changeby}}</li>
       <li><b>Changed Date: </b>{{asset.changedate}}</li>
     </ul>
-    <router-link v-bind:to="'/' + this.$props.pageno">List Page</router-link>
+    <router-link to="/">List Page</router-link>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
+
 export default {
   name: 'MXAsset',
   props: [
-    'assetuid',
-    'pageno'
+    'assetuid'
   ],
-  data() {
-    return {
-      asset: {}
-    };
+  mounted() {
+    var url = 'http://192.168.1.74:9080/maximo/oslc/os/mxasset/' + this.$props.assetuid + '?_lid=wilson&_lpwd=wilson&lean=1';
+    this.queryMXAsset(url);
   },
-  beforeMount() {
-    this.queryMXREST('http://192.168.1.74:9080/maximo/oslc/os/mxasset/' + this.$props.assetuid + '?_lid=wilson&_lpwd=wilson&lean=1')
+  computed: {
+    ...mapGetters({
+      asset: "getCurrentAsset"
+    })
   },
   methods: {
-    queryMXREST: function(url) {
-      fetch(url)
-        .then(response => response.json())
-        .then(json => {
-          this.asset = json;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+    ...mapActions(["queryMXAsset"])
   }
 };
 </script>

@@ -14,13 +14,7 @@ export default new Router({
       component: MXAssetSet
     },
     {
-      path: '/:pageno',
-      name: 'MXAssetSet',
-      props: true,
-      component: MXAssetSet
-    },
-    {
-      path: '/asset/:pageno/:assetuid',
+      path: '/asset/:assetuid',
       name: 'MXAsset',
       props: true,
       component: MXAsset
