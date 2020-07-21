@@ -11,7 +11,7 @@ export default new Vuex.Store({
             assets: [],
             previousPageURL: '',
             nextPageURL: '',
-            pagenum: 0
+            pagenum: 1
         },
         currentAsset: {}
     },

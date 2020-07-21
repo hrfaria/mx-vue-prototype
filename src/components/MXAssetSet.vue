@@ -34,12 +34,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "MXAssetSet",
   mounted() {
-    var pageno = this.pagenum > 0 ? "pageno=" + this.pagenum + "&" : "";
-    var url =
-      "http://192.168.1.74:9080/maximo/oslc/os/mxasset?" +
-      pageno +
-      "_lid=wilson&_lpwd=wilson&lean=1&oslc.pageSize=5&oslc.select=assetuid,assetnum,siteid,description,location,status,parent,itemnum,priority,serialnum,failurecode,vendor,manufacturer,installdate,purchaseprice,isrunning,totdowntime,changeby,changedate";
-    this.queryMXAssetSet(url);
+    this.loadPage();
   },
   computed: {
     ...mapGetters({
@@ -50,7 +45,27 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["queryMXAssetSet"])
+    ...mapActions(["queryMXAssetSet"]),
+    loadPage() {
+      var url =
+        (this.$config.cors_proxy.enabled === "true"
+          ? "http://" +
+            this.$config.cors_proxy.host +
+            ":" +
+            this.$config.cors_proxy.port +
+            "/"
+          : "") +
+        this.$config.maximo.url +
+        "/maximo/oslc/os/mxasset?_lid=" +
+        this.$config.maximo.username +
+        "&_lpwd=" +
+        this.$config.maximo.password +
+        "&pageno=" +
+        this.pagenum +
+        "&lean=1&oslc.pageSize=5&oslc.select=assetuid,assetnum,siteid,description,location,status,parent,itemnum,priority,serialnum,failurecode,vendor,manufacturer,installdate,purchaseprice,isrunning,totdowntime,changeby,changedate";
+
+      this.queryMXAssetSet(url);
+    }
   }
 };
 </script>
