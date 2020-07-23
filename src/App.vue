@@ -1,18 +1,15 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <img id="vue_logo" src="./assets/logo.png">
+    <div>{{this.$version}}</div>
     <router-view/>
   </div>
 </template>
 
 <script>
-import MXAsset from './components/MXAsset'
 
 export default {
-  name: 'App',
-  components: {
-    MXAsset
-  }
+  name: 'App'
 }
 </script>
 
@@ -24,5 +21,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+#vue_logo {
+  width:40px;
+  height:40px;
 }
 </style>

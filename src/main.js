@@ -16,6 +16,9 @@ if (process.env.NODE_ENV === 'production') {
   Vue.prototype.$config = Object.freeze(development);
 }
 
+// Current version of Vue
+Vue.prototype.$version = Vue.version;
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

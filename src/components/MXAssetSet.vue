@@ -48,13 +48,6 @@ export default {
     ...mapActions(["queryMXAssetSet"]),
     loadPage() {
       var url =
-        (this.$config.cors_proxy.enabled === "true"
-          ? "http://" +
-            this.$config.cors_proxy.host +
-            ":" +
-            this.$config.cors_proxy.port +
-            "/"
-          : "") +
         this.$config.maximo.url +
         "/maximo/oslc/os/mxasset?_lid=" +
         this.$config.maximo.username +
