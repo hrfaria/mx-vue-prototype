@@ -9,52 +9,39 @@ export default new Vuex.Store({
     state: {
         currentPage: {
             assets: [],
-            previousPageURL: '',
-            nextPageURL: '',
             pagenum: 1
         },
+        totalCount: 0,
         currentAsset: {}
     },
     getters: {
         getAssets: (state) => { return state.currentPage.assets },
-        getPreviousPageURL: (state) => { return state.currentPage.previousPageURL },
-        getNextPageURL: (state) => { return state.currentPage.nextPageURL },
         getPagenum: (state) => { return state.currentPage.pagenum },
-        getCurrentAsset: (state) => { return state.currentAsset }
+        getCurrentAsset: (state) => { return state.currentAsset },
+        getTotalCount: (state) => { return state.totalCount }
     },
     mutations: {
-        setCurrentPage(state, page) {
+        updateCurrentPage(state, page) {
             state.currentPage.assets = page.member;
-
-            var nextPage = page.responseInfo.nextPage;
-            state.currentPage.nextPageURL = nextPage != null ? nextPage.href : '';
-
-            var previousPage = page.responseInfo.previousPage;
-            state.currentPage.previousPageURL = previousPage != null ? previousPage.href : '';
-
             state.currentPage.pagenum = page.responseInfo.pagenum;
+            state.totalCount = page.responseInfo.totalCount;
         },
-        setCurrentAsset(state, asset) {
+        updateCurrentAsset(state, asset) {
             state.currentAsset = asset;
+        },
+        updatePagenum(state, pagenum) {
+            state.currentPage.pagenum = pagenum;
         }
     },
     actions: {
-        queryMXAssetSet(context, url) {
-            fetch(url)
-                .then(response => response.json())
-                .then(json => { context.commit('setCurrentPage', json) })
-                .catch(error => {
-                    console.log(error);
-                });
-
+        updateCurrentPage(context, page) {
+            context.commit('updateCurrentPage', page);
         },
-        queryMXAsset(context, url) {
-            fetch(url)
-                .then(response => response.json())
-                .then(json => { context.commit('setCurrentAsset', json) })
-                .catch(error => {
-                    console.log(error);
-                });
+        updateCurrentAsset(context, asset) {
+            context.commit('updateCurrentAsset', asset);
+        },
+        updatePagenum(context, pagenum) {
+            context.commit('updatePagenum', pagenum)
         }
     }
 });

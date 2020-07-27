@@ -94,7 +94,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["queryMXAsset"]),
+    ...mapActions(["updateCurrentAsset"]),
     loadPage() {
       var url =
         this.$config.maximo.url +
@@ -106,7 +106,14 @@ export default {
         this.$config.maximo.password +
         "&lean=1";
 
-      this.queryMXAsset(url);
+      fetch(url)
+        .then(response => response.json())
+        .then(json => {
+          this.updateCurrentAsset(json);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };

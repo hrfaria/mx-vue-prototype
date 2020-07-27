@@ -1,29 +1,22 @@
 <template>
   <div>
-    <table>
-      <tr>
-        <th>Asset #</th>
-        <th>Description</th>
-        <th>Location</th>
-        <th>Site</th>
-      </tr>
-      <tr v-for="asset in assets" v-bind:key="asset.assetuid">
-        <td>
-          <router-link v-bind:to="'asset/' + asset.assetuid">{{ asset.assetnum }}</router-link>
-        </td>
-        <td>{{ asset.description }}</td>
-        <td>{{ asset.location }}</td>
-        <td>{{ asset.siteid }}</td>
-      </tr>
-    </table>
-    <button
-      v-on:click="queryMXAssetSet(previousPageURL)"
-      v-bind:disabled="previousPageURL.length == 0"
-    >Previous page</button>
-    <button
-      v-on:click="queryMXAssetSet(nextPageURL)"
-      v-bind:disabled="nextPageURL.length == 0"
-    >Next page</button>
+    <b-table
+      id="list-table"
+      :items="loadPage"
+      :fields="fields"
+      :per-page="perPage"
+      :current-page="pagenum"
+    >
+      <template v-slot:cell(assetnum)="data">
+        <router-link v-bind:to="'asset/' + data.item.assetuid">{{ data.item.assetnum }}</router-link>
+      </template>
+    </b-table>
+    <b-pagination
+      v-model="pagenum"
+      :total-rows="totalCount"
+      :per-page="perPage"
+      aria-controls="list-table"
+    ></b-pagination>
   </div>
 </template>
 
@@ -33,20 +26,53 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "MXAssetSet",
+  props: {
+    perPage: { default: 5 }
+  },
   mounted() {
-    this.loadPage();
+  },
+  data() {
+    return {
+      // TODO: Make this a property that will be passed to the component
+      fields: [
+        {
+          key: "assetnum",
+          label: "Asset #",
+          sortable: true
+        },
+        {
+          key: "description",
+          sortable: false
+        },
+        {
+          key: "location",
+          sortable: true
+        },
+        {
+          key: "siteid",
+          label: "Site",
+          sortable: false
+        }
+      ]
+    };
   },
   computed: {
     ...mapGetters({
       assets: "getAssets",
-      previousPageURL: "getPreviousPageURL",
-      nextPageURL: "getNextPageURL",
-      pagenum: "getPagenum"
-    })
+      totalCount: "getTotalCount"
+    }),
+    pagenum: {
+      get() {
+        return this.$store.state.currentPage.pagenum;
+      },
+      set(value) {
+        this.$store.commit("updatePagenum", value);
+      }
+    }
   },
   methods: {
-    ...mapActions(["queryMXAssetSet"]),
-    loadPage() {
+    ...mapActions(["updateCurrentPage"]),
+    loadPage(ctx, callback) {
       var url =
         this.$config.maximo.url +
         "/maximo/oslc/os/mxasset?_lid=" +
@@ -54,30 +80,22 @@ export default {
         "&_lpwd=" +
         this.$config.maximo.password +
         "&pageno=" +
-        this.pagenum +
+        ctx.currentPage +
         "&lean=1&oslc.pageSize=5&oslc.select=assetuid,assetnum,siteid,description,location,status,parent,itemnum,priority,serialnum,failurecode,vendor,manufacturer,installdate,purchaseprice,isrunning,totdowntime,changeby,changedate";
 
-      this.queryMXAssetSet(url);
+      fetch(url)
+        .then(response => response.json())
+        .then(json => {
+          this.updateCurrentPage(json);
+          callback(this.assets);
+        })
+        .catch(error => {
+          console.log(error);
+          callback([]);
+        });
+
+      return null;
     }
   }
 };
 </script>
-
-<style scoped>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td,
-th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
