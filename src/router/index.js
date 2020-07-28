@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import MXAssetSet from '@/components/MXAssetSet'
+import Home from '@/views/Home'
 import MXAsset from '@/components/MXAsset'
 
 Vue.use(Router)
@@ -9,15 +9,19 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'MXAssetSet',
-      props: true,
-      component: MXAssetSet
+      name: 'Home',
+      component: Home
     },
     {
       path: '/asset/:assetuid',
       name: 'MXAsset',
       props: true,
       component: MXAsset
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: () => import('@/views/About.vue')
     }
   ]
 })

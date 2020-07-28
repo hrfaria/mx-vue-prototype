@@ -24,10 +24,7 @@ Vue.prototype.$version = Vue.version;
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
   router,
   store,
-  // components: { App },
-  render: h => h(App),
-  template: '<App/>'
-})
+  render: h => h(App)
+}).$mount('#app')

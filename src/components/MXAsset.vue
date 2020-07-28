@@ -74,7 +74,6 @@
         {{asset.changedate}}
       </li>
     </ul>
-    <router-link to="/">List Page</router-link>
   </div>
 </template>
 
