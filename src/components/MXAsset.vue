@@ -80,6 +80,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
+import axios from "axios";
 
 export default {
   name: "MXAsset",
@@ -89,32 +90,29 @@ export default {
   },
   computed: {
     ...mapGetters({
-      asset: "getCurrentAsset"
-    })
+      asset: "getCurrentAsset",
+    }),
   },
   methods: {
     ...mapActions(["updateCurrentAsset"]),
     loadPage() {
-      var url =
-        this.$config.maximo.url +
-        "/maximo/oslc/os/mxasset/" +
-        this.$props.assetuid +
-        "?_lid=" +
-        this.$config.maximo.username +
-        "&_lpwd=" +
-        this.$config.maximo.password +
-        "&lean=1";
-
-      fetch(url)
-        .then(response => response.json())
-        .then(json => {
-          this.updateCurrentAsset(json);
+      axios({
+        method: "get",
+        url: this.$config.maximo.url + "/maximo/oslc/os/mxasset/" + this.$props.assetuid,
+        params: {
+          _lid: this.$config.maximo.username,
+          _lpwd: this.$config.maximo.password,
+          lean: 1
+        }
+      })
+        .then((response) => {
+          this.updateCurrentAsset(response.data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     }
-  }
+  },
 };
 </script>
 

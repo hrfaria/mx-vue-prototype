@@ -23,14 +23,14 @@
 <script>
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
+import axios from "axios";
 
 export default {
   name: "MXAssetSet",
   props: {
-    perPage: { default: 5 }
+    perPage: { default: 5 },
   },
-  mounted() {
-  },
+  mounted() {},
   data() {
     return {
       // TODO: Make this a property that will be passed to the component
@@ -38,28 +38,28 @@ export default {
         {
           key: "assetnum",
           label: "Asset #",
-          sortable: true
+          sortable: true,
         },
         {
           key: "description",
-          sortable: false
+          sortable: false,
         },
         {
           key: "location",
-          sortable: true
+          sortable: true,
         },
         {
           key: "siteid",
           label: "Site",
-          sortable: false
-        }
-      ]
+          sortable: false,
+        },
+      ],
     };
   },
   computed: {
     ...mapGetters({
       assets: "getAssets",
-      totalCount: "getTotalCount"
+      totalCount: "getTotalCount",
     }),
     pagenum: {
       get() {
@@ -67,35 +67,36 @@ export default {
       },
       set(value) {
         this.$store.commit("updatePagenum", value);
-      }
-    }
+      },
+    },
   },
   methods: {
     ...mapActions(["updateCurrentPage"]),
     loadPage(ctx, callback) {
-      var url =
-        this.$config.maximo.url +
-        "/maximo/oslc/os/mxasset?_lid=" +
-        this.$config.maximo.username +
-        "&_lpwd=" +
-        this.$config.maximo.password +
-        "&pageno=" +
-        ctx.currentPage +
-        "&lean=1&oslc.pageSize=5&oslc.select=assetuid,assetnum,siteid,description,location,status,parent,itemnum,priority,serialnum,failurecode,vendor,manufacturer,installdate,purchaseprice,isrunning,totdowntime,changeby,changedate";
-
-      fetch(url)
-        .then(response => response.json())
-        .then(json => {
-          this.updateCurrentPage(json);
+      axios({
+        method: "get",
+        url: this.$config.maximo.url + "/maximo/oslc/os/mxasset",
+        params: {
+          _lid: this.$config.maximo.username,
+          _lpwd: this.$config.maximo.password,
+          pageno: ctx.currentPage,
+          lean: 1,
+          "oslc.pageSize": this.perPage,
+          "oslc.select":
+            "assetuid,assetnum,siteid,description,location,status,parent,itemnum,priority,serialnum,failurecode,vendor,manufacturer,installdate,purchaseprice,isrunning,totdowntime,changeby,changedate",
+        },
+      })
+        .then((response) => {
+          this.updateCurrentPage(response.data);
           callback(this.assets);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           callback([]);
         });
 
       return null;
-    }
-  }
+    },
+  },
 };
 </script>
