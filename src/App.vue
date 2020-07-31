@@ -1,31 +1,17 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <top-header />
+    <router-view />
   </div>
 </template>
 
 <script>
+import TopHeader from "@/components/TopHeader.vue";
 
 export default {
-  name: 'App'
-}
+  name: "App",
+  components: {
+    "top-header": TopHeader,
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-#vue_logo {
-  width:40px;
-  height:40px;
-}
-</style>

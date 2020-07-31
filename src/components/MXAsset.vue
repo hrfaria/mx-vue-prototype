@@ -1,13 +1,30 @@
 <template>
   <div>
-    <ul>
+    <b-container fluid="sm" class="ml-0 mt-3">
+      <b-row>
+        <b-col sm="8">
+          <b-form-group id="assetnum-group" label="Asset #" label-for="assetnum">
+            <b-form-input id="assetnum" v-model="asset.assetnum" type="text"></b-form-input>
+          </b-form-group>
+          <b-form-group id="description-group" label="Description" label-for="description">
+            <b-form-input id="description" v-model="asset.description" type="text"></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row> 
+        <b-col>
+          <b-button v-on:click="save()">Save</b-button>
+        </b-col>
+      </b-row>
+    </b-container>
+    <!-- <ul>
       <li>
         <b>Asset #:</b>
         {{asset.assetnum}}
       </li>
       <li>
         <b>Description:</b>
-        {{asset.description}}
+        <input v-model="asset.description" />
       </li>
       <li>
         <b>Status:</b>
@@ -74,6 +91,7 @@
         {{asset.changedate}}
       </li>
     </ul>
+    <button v-on:click="save()">Save</button>-->
   </div>
 </template>
 
@@ -86,7 +104,7 @@ export default {
   name: "MXAsset",
   props: ["assetuid"],
   mounted() {
-    this.loadPage();
+    this.load();
   },
   computed: {
     ...mapGetters({
@@ -95,15 +113,18 @@ export default {
   },
   methods: {
     ...mapActions(["updateCurrentAsset"]),
-    loadPage() {
+    load() {
       axios({
         method: "get",
-        url: this.$config.maximo.url + "/maximo/oslc/os/mxasset/" + this.$props.assetuid,
+        url:
+          this.$config.maximo.url +
+          "/maximo/oslc/os/mxasset/" +
+          this.$props.assetuid,
         params: {
           _lid: this.$config.maximo.username,
           _lpwd: this.$config.maximo.password,
-          lean: 1
-        }
+          lean: 1,
+        },
       })
         .then((response) => {
           this.updateCurrentAsset(response.data);
@@ -111,14 +132,36 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    }
+    },
+    save() {
+      axios({
+        method: "post",
+        url:
+          this.$config.maximo.url +
+          "/maximo/oslc/os/mxasset/" +
+          this.$props.assetuid,
+        headers: {
+          "x-method-override": "PATCH",
+          properties: "*",
+        },
+        params: {
+          _lid: this.$config.maximo.username,
+          _lpwd: this.$config.maximo.password,
+          lean: 1,
+        },
+        data: this.asset,
+      })
+        .then((response) => {
+          if (response.status == "200") {
+            alert("Updated successfully!");
+          } else {
+            alert("Oops... something went wrong!");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>
-
-<style scoped>
-ul,
-li {
-  text-align: left;
-}
-</style>

@@ -2,6 +2,8 @@
 
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from 'vuex-persistedstate';
+import Cookies from 'js-cookie';
 
 Vue.use(Vuex);
 
@@ -14,6 +16,16 @@ export default new Vuex.Store({
         totalCount: 0,
         currentAsset: {}
     },
+    plugins: [
+        createPersistedState({
+            storage: {
+                getItem: key => Cookies.get(key),
+                setItem: (key, value) =>
+                    Cookies.set(key, value, { expires: 3, secure: false }),
+                removeItem: key => Cookies.remove(key)
+            }
+        })
+    ],
     getters: {
         getAssets: (state) => { return state.currentPage.assets },
         getPagenum: (state) => { return state.currentPage.pagenum },

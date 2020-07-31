@@ -2,7 +2,7 @@
   <div>
     <b-table
       id="list-table"
-      :items="loadPage"
+      :items="load"
       :fields="fields"
       :per-page="perPage"
       :current-page="pagenum"
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     ...mapActions(["updateCurrentPage"]),
-    loadPage(ctx, callback) {
+    load(ctx, callback) {
       axios({
         method: "get",
         url: this.$config.maximo.url + "/maximo/oslc/os/mxasset",
