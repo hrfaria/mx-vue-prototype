@@ -3,7 +3,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from 'vuex-persistedstate';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 
 Vue.use(Vuex);
 
@@ -17,14 +17,20 @@ export default new Vuex.Store({
         currentAsset: {}
     },
     plugins: [
-        createPersistedState({
-            storage: {
-                getItem: key => Cookies.get(key),
-                setItem: (key, value) =>
-                    Cookies.set(key, value, { expires: 3, secure: false }),
-                removeItem: key => Cookies.remove(key)
-            }
-        })
+        createPersistedState(
+            /**
+             * Only use cookies if you want to send information back to the server, e.g. user information.
+             * Note: vuex-persistedstate seems to have a problem with object type state properties. 
+             **/ 
+            /* {
+                storage: {
+                    getItem: key => Cookies.get(key),
+                    setItem: (key, value) =>
+                        Cookies.set(key, value, { expires: 3, secure: false }),
+                    removeItem: key => Cookies.remove(key)
+                }
+            } */
+        )
     ],
     getters: {
         getAssets: (state) => { return state.currentPage.assets },
