@@ -6,12 +6,12 @@
 </template>
 
 <script>
-import TopHeader from "@/views/TopHeader.vue";
+import Header from "@/views/Header.vue";
 
 export default {
   name: "App",
   components: {
-    "top-header": TopHeader,
+    "top-header": Header
   },
 };
 </script>

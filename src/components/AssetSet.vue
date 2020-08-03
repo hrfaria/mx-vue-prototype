@@ -26,7 +26,7 @@ import { mapGetters } from "vuex";
 import axios from "axios";
 
 export default {
-  name: "MXAssetSet",
+  name: "AssetSet",
   props: {
     perPage: { default: 5 },
   },

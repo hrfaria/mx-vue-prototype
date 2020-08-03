@@ -1,17 +1,17 @@
 <template>
   <div>
-    <MXAssetSet/>
+    <AssetSet/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import MXAssetSet from '@/components/MXAssetSet.vue'
+import AssetSet from '@/components/AssetSet.vue'
 
 export default {
-  name: 'Home',
+  name: 'AssetSetView',
   components: {
-    MXAssetSet
+    AssetSet
   }
 }
 </script>

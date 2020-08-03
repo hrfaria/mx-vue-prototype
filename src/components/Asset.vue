@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{this.$store.state.currentAsset.description}}
     <b-container class="ml-0 mt-3">
       <b-row>
         <b-col sm="8">
@@ -11,7 +12,12 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <b-row> 
+      <b-row>
+        <b-col>
+          <b-link :to="'/asset/' + assetuid + '/assetspec'">Specification</b-link>
+        </b-col>
+      </b-row>
+      <b-row>
         <b-col>
           <b-button v-on:click="save()">Save</b-button>
         </b-col>
@@ -101,7 +107,7 @@ import { mapActions } from "vuex";
 import axios from "axios";
 
 export default {
-  name: "MXAsset",
+  name: "Asset",
   props: ["assetuid"],
   mounted() {
     this.load();
@@ -153,6 +159,7 @@ export default {
       })
         .then((response) => {
           if (response.status == "200") {
+            this.updateCurrentAsset(response.data);
             alert("Updated successfully!");
           } else {
             alert("Oops... something went wrong!");
