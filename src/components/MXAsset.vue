@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container fluid="sm" class="ml-0 mt-3">
+    <b-container class="ml-0 mt-3">
       <b-row>
         <b-col sm="8">
           <b-form-group id="assetnum-group" label="Asset #" label-for="assetnum">

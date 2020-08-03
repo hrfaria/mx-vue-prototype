@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import TopHeader from "@/components/TopHeader.vue";
+import TopHeader from "@/views/TopHeader.vue";
 
 export default {
   name: "App",
