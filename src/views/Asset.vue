@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Asset :assetuid="assetuid"/>
+    <!-- <Asset :assetuid="assetuid"/> -->
+    <router-view></router-view>
   </div>
 </template>
 

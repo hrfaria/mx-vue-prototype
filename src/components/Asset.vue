@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{this.$store.state.currentAsset.description}}
+    {{this.$route.path}}
     <b-container class="ml-0 mt-3">
       <b-row>
         <b-col sm="8">

@@ -5,29 +5,55 @@ import AssetSetView from '@/views/AssetSet.vue'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
+    /* {
+      path: '/about',
+      component: () => import('@/views/About.vue')
+    }, */
     {
       path: '/',
-      name: 'AssetSetView',
       component: AssetSetView
     },
     {
       path: '/asset/:assetuid',
+      component: () => import('@/views/Asset.vue'),
+      meta: {
+        breadCrumb: 'Asset'
+      },
+      children: [
+        {
+          path: '',
+          props: true,
+          component: () => import('@/components/Asset.vue')
+        },
+        {
+          path: 'assetspec',  
+          props: true,
+          component: () => import('@/views/AssetSpecSet.vue'),
+          meta: {
+            breadCrumb: 'Specification'
+          }
+        }
+      ]
+    }
+    /* {
+      path: '/asset/:assetuid',
       name: 'AssetView',
       props: true,
-      component: () => import('@/views/Asset.vue')
+      component: () => import('@/views/Asset.vue'),
+      meta: {
+        breadCrumb: 'Asset'
+      },
     },
     {
       path: '/asset/:assetuid/assetspec',
       name: 'AssetSpecSetView',
       props: true,
-      component: () => import('@/views/AssetSpecSet.vue')
-    },
-    {
-      path: '/about',
-      name: 'About',
-      component: () => import('@/views/About.vue')
-    }
+      component: () => import('@/views/AssetSpecSet.vue'),
+      meta: {
+        breadCrumb: 'Specification'
+      },
+    } */
   ]
 })
