@@ -14,6 +14,7 @@
     "bootstrap-vue": "^2.1.0",
     "js-cookie": "^2.2.1",
     "vue": "^2.5.2",
+    "vue-clamp": "^0.3.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.5.1",
     "vuex-persistedstate": "^3.0.1"

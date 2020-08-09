@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{this.$route.path}}
     <b-container class="ml-0 mt-3">
       <b-row>
         <b-col sm="8">
@@ -13,8 +12,14 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col>
-          <b-link :to="'/asset/' + assetuid + '/assetspec'">Specification</b-link>
+        <b-col sm="*">
+          <!-- <b-link :to="'/asset/' + assetuid + '/assetspec'">Specification</b-link> -->
+          <b-nav>
+            <b-nav-item
+              :to="'/asset/' + assetuid + '/assetspec'"
+              class="bg-info"
+            >Specification</b-nav-item>
+          </b-nav>
         </b-col>
       </b-row>
       <b-row>

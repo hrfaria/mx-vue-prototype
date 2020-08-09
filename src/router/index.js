@@ -17,7 +17,11 @@ export default new Router({
     },
     {
       path: '/asset/:assetuid',
-      component: () => import('@/views/Asset.vue'),
+      component: {
+        render (c) {
+          return c('router-view')
+        }
+      },
       meta: {
         breadCrumb: 'Asset'
       },
@@ -25,7 +29,7 @@ export default new Router({
         {
           path: '',
           props: true,
-          component: () => import('@/components/Asset.vue')
+          component: () => import('@/views/Asset.vue')
         },
         {
           path: 'assetspec',  
@@ -37,23 +41,5 @@ export default new Router({
         }
       ]
     }
-    /* {
-      path: '/asset/:assetuid',
-      name: 'AssetView',
-      props: true,
-      component: () => import('@/views/Asset.vue'),
-      meta: {
-        breadCrumb: 'Asset'
-      },
-    },
-    {
-      path: '/asset/:assetuid/assetspec',
-      name: 'AssetSpecSetView',
-      props: true,
-      component: () => import('@/views/AssetSpecSet.vue'),
-      meta: {
-        breadCrumb: 'Specification'
-      },
-    } */
   ]
 })

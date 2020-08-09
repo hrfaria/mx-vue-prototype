@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{this.$route.path}}
     <ul>
       <li
         v-for="assetattr in asset.assetspec"
