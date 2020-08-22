@@ -54,19 +54,25 @@
 <script>
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
-import axios from "axios";
 import VClamp from "vue-clamp";
+import maximoRESTAPI from "../mixins/maximoRESTAPI";
 
 export default {
   name: "AssetSetCard",
   components: {
     VClamp,
   },
+  data: function () {
+    return {
+      select:
+        "assetuid,assetnum,siteid,description,location,status,parent,itemnum,priority,serialnum,failurecode,vendor,manufacturer,installdate,purchaseprice,isrunning,totdowntime,changeby,changedate",
+    };
+  },
   props: {
     perPage: { default: 6 },
   },
   mounted() {
-    this.load(this.pagenum);
+    this.loadSet("mxasset", this.pagenum, this.perPage, this.select);
   },
   computed: {
     ...mapGetters({
@@ -84,7 +90,7 @@ export default {
   },
   watch: {
     pagenum: function () {
-      this.load(this.pagenum);
+      this.loadSet("mxasset", this.pagenum, this.perPage, this.select);
     },
   },
   filters: {
@@ -97,41 +103,8 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["updateCurrentPage"]),
-    load(pagenum) {
-      axios({
-        method: "get",
-        url: this.$config.maximo.url + "/maximo/oslc/os/mxasset",
-        params: {
-          _lid: this.$config.maximo.username,
-          _lpwd: this.$config.maximo.password,
-          pageno: pagenum,
-          lean: 1,
-          "oslc.pageSize": this.perPage,
-          "oslc.select":
-            "assetuid,assetnum,siteid,description,location,status,parent,itemnum,priority,serialnum,failurecode,vendor,manufacturer,installdate,purchaseprice,isrunning,totdowntime,changeby,changedate",
-        },
-      })
-        .then((response) => {
-          this.updateCurrentPage(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    /* load(pagenum) {
-      return [
-        { assetuid: 1, assetnum: '1001', description: 'Asset 1001', page: 1},
-        { assetuid: 2, assetnum: '1002', description: 'Asset 1002', page: 1},
-        { assetuid: 3, assetnum: '1003', description: 'Asset 1003', page: 1},
-        { assetuid: 4, assetnum: '1004', description: 'Asset 1004', page: 2},
-        { assetuid: 5, assetnum: '1005', description: 'Asset 1005', page: 2},
-        { assetuid: 6, assetnum: '1006', description: 'Asset 1006', page: 2},
-        { assetuid: 7, assetnum: '1007', description: 'Asset 1007', page: 3},
-        { assetuid: 8, assetnum: '1008', description: 'Asset 1008', page: 3},
-        { assetuid: 9, assetnum: '1009', description: 'Asset 1009', page: 3}
-      ].filter(asset => asset.page == pagenum)
-    } */
+    ...mapActions(["updateCurrentPage"])
   },
+  mixins: [maximoRESTAPI],
 };
 </script>

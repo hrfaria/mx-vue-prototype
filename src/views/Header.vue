@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info" class="mb-2">
-      <b-navbar-brand href="#">NavBar</b-navbar-brand>
+      <!-- <b-navbar-brand to="/">NavBar</b-navbar-brand> -->
       
       <b-navbar-nav>
         <b-breadcrumb :items="crumbs" />
@@ -34,8 +34,8 @@
 export default {
   computed: {
     crumbs: function () {
-      let params = this.$route.params;
-      let breadcrumbs = [
+      var params = this.$route.params;
+      var breadcrumbs = [
         {
           to: "/",
           text: "Home",

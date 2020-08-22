@@ -5,12 +5,12 @@ import AssetSetView from '@/views/AssetSet.vue'
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history',
+  mode: 'history',
   routes: [
-    /* {
-      path: '/about',
-      component: () => import('@/views/About.vue')
-    }, */
+    {
+      path: '/test',
+      component: () => import('@/components/Test.vue')
+    },
     {
       path: '/',
       component: AssetSetView
